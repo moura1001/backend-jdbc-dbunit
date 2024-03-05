@@ -11,10 +11,10 @@ import java.util.List;
 
 public class H2Database implements UsuarioDAO {
 
-	private static final String JDBC_DRIVER = "org.h2.Driver";
-	private static final String DB_URL = "jdbc:h2:~/mydb";
-	private static final String USER = "admin";
-	private static final String PASSWORD = "";
+	public static final String JDBC_DRIVER = "org.h2.Driver";
+	public static final String DB_URL = "jdbc:h2:~/mydb";
+	public static final String USER = "admin";
+	public static final String PASSWORD = "";
 
 	static {
 		try {
@@ -25,8 +25,14 @@ public class H2Database implements UsuarioDAO {
 
 			System.out.println("Creating table in given database...");
 			Statement stmt = conn.createStatement();
-			String sql = "CREATE TABLE usuario " + "(" + "login text NOT NULL, " + "email text, " + "nome text, "
-					+ "senha text, " + "pontos integer, " + "PRIMARY KEY (login)" + ")";
+			String sql = "CREATE TABLE IF NOT EXISTS usuario(" + 
+				"login text NOT NULL, " +
+				"email text, " +
+				"nome text, " +
+				"senha text, " +
+				"pontos integer, " +
+				"PRIMARY KEY (login)" + 
+			")";
 			stmt.executeUpdate(sql);
 
 			System.out.println("Created table in given database...");
@@ -64,7 +70,7 @@ public class H2Database implements UsuarioDAO {
 			String sql = "SELECT * FROM usuario WHERE login = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, login);
-			ResultSet rs = stmt.executeQuery(sql);
+			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
 				return new Usuario(rs.getString("login"), rs.getString("email"), rs.getString("nome"),
