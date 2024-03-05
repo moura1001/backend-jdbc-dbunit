@@ -90,10 +90,10 @@ public class H2Database implements UsuarioDAO {
 
 			String sql = "UPDATE usuario SET pontos = pontos + ? WHERE login = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, login);
-			stmt.setInt(2, pontos);
+			stmt.setInt(1, pontos);
+			stmt.setString(2, login);
 
-			stmt.executeUpdate(sql);
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new RuntimeException("Não foi possível executar o acesso", e);

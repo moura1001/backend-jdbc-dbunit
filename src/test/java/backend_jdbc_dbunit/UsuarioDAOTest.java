@@ -4,7 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
+import org.dbunit.Assertion;
 import org.dbunit.JdbcDatabaseTester;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ITable;
 import org.dbunit.util.fileloader.FlatXmlDataFileLoader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,6 +44,23 @@ class UsuarioDAOTest {
 		Usuario usuario = dao.recuperar("maria");
 		assertNotNull(usuario);
 		assertEquals("Maria João", usuario.getNome());
+	}
+	
+	@Test
+	void deveAdicionarPontosParaOUsuarioEspecificado() {
+		dao.adicionarPontos("joao", 256);
+		try {
+			IDataSet currenDataSet = jdt.getConnection().createDataSet();
+			ITable currentTable = currenDataSet.getTable("USUARIO");
+			
+			FlatXmlDataFileLoader loader = new FlatXmlDataFileLoader();
+			IDataSet expectedDataset = loader.load("/backend_jdbc_dbunit/update.xml");
+			ITable expectedTable = expectedDataset.getTable("USUARIO");
+			
+			Assertion.assertEquals(expectedTable, currentTable);
+		} catch (Exception e) {
+			fail(e);
+		}
 	}
 
 }
