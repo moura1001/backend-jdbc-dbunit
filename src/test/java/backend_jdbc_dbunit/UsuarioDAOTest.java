@@ -62,5 +62,22 @@ class UsuarioDAOTest {
 			fail(e);
 		}
 	}
+	
+	@Test
+	void deveInserirUmNovoUsuario() {
+		dao.inserir(new Usuario("newuser", "newuser@email.com", "New User", "789", 2048));
+		try {
+			IDataSet currenDataSet = jdt.getConnection().createDataSet();
+			ITable currentTable = currenDataSet.getTable("USUARIO");
+			
+			FlatXmlDataFileLoader loader = new FlatXmlDataFileLoader();
+			IDataSet expectedDataset = loader.load("/backend_jdbc_dbunit/insert.xml");
+			ITable expectedTable = expectedDataset.getTable("USUARIO");
+			
+			Assertion.assertEquals(expectedTable, currentTable);
+		} catch (Exception e) {
+			fail(e);
+		}
+	}
 
 }

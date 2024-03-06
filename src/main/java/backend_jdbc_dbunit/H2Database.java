@@ -56,7 +56,7 @@ public class H2Database implements UsuarioDAO {
 			stmt.setString(4, u.getSenha());
 			stmt.setInt(5, u.getPontos());
 
-			stmt.executeUpdate(sql);
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new RuntimeException("Não foi possível executar o acesso", e);
